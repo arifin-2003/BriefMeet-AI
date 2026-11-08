@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 44" fill="none">
+  <!-- Brand Icon Squircle -->
+  <rect x="2" y="3" width="38" height="38" rx="10" fill="#302015" stroke="#C29B48" stroke-width="1.2" stroke-opacity="0.35"/>
+  
+  <!-- Left stem: Executive Document & 'B' -->
+  <path d="M13 12V31" stroke="#F5F0E6" stroke-width="2.4" stroke-linecap="round"/>
+  
+  <!-- Upper loop of 'B' -->
+  <path d="M13 13.5H20C22.2091 13.5 24 15.2909 24 17.5C24 19.7091 22.2091 21.5 20 21.5H13" stroke="#F5F0E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Lower loop of 'B' connecting to 'M' -->
+  <path d="M13 21.5H19.5C21.9853 21.5 24 23.5147 24 26C24 28.4853 21.9853 30.5 19.5 30.5H13" stroke="#F5F0E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Geometric 'M' meeting chevron in muted gold -->
+  <path d="M24 31V12L29 23L34 12V31" stroke="#C29B48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- AI Sparkle Core Node -->
+  <path d="M28.5 10.5L29.3 12.5L31.3 13.3L29.3 14.1L28.5 16.1L27.7 14.1L25.7 13.3L27.7 12.5L28.5 10.5Z" fill="#C29B48"/>
+  
+  <!-- Wordmark: Brief -->
+  <text x="49" y="27" font-family="'Newsreader', 'Georgia', serif" font-size="21" font-weight="700" fill="#302015" letter-spacing="-0.3">Brief</text>
+  
+  <!-- Wordmark: Meet -->
+  <text x="96" y="27" font-family="'Newsreader', 'Georgia', serif" font-size="20" font-weight="600" fill="#3D3733" letter-spacing="-0.5">Meet</text>
+  
+  <!-- AI Pill Badge -->
+  <rect x="154" y="14" width="28" height="18" rx="6" fill="#F8F1DE" stroke="#C29B48" stroke-width="1" stroke-opacity="0.45"/>
+  <text x="160.5" y="26.5" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800" fill="#725E4B" letter-spacing="0.6">AI</text>
+</svg>

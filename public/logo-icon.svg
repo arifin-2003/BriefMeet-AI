@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <!-- Container with subtle inner depth -->
+  <rect x="1" y="1" width="38" height="38" rx="10" fill="#302015" stroke="#D4AF37" stroke-width="1.2" stroke-opacity="0.35"/>
+  
+  <!-- Left stem representing Document & 'B' -->
+  <path d="M12 10.5V29.5" stroke="#F5F0E6" stroke-width="2.4" stroke-linecap="round"/>
+  
+  <!-- Top loop forming 'B' and meeting curve -->
+  <path d="M12 12H19.5C21.9853 12 24 14.0147 24 16.5C24 18.9853 21.9853 21 19.5 21H12" stroke="#F5F0E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Lower diagonal forming 'M' and forward trajectory -->
+  <path d="M12 20.5H19C21.7614 20.5 24 22.7386 24 25.5C24 28.2614 21.7614 30.5 19 30.5H12" stroke="#F5F0E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Intersecting 'M' diagonal fold in muted gold -->
+  <path d="M21 30V11L26 22L31 11V30" stroke="#C29B48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.9"/>
+  
+  <!-- AI Intelligence Core Node (Faceted Sparkle) -->
+  <path d="M28 11L29 13.5L31.5 14.5L29 15.5L28 18L27 15.5L24.5 14.5L27 13.5L28 11Z" fill="#C29B48"/>
+</svg>

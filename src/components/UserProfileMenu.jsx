@@ -63,8 +63,8 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
       {/* Dropdown Menu Popup */}
       {isOpen && (
         <div 
-          role="menu"
-          aria-orientation="vertical"
+          role="dialog"
+
           aria-labelledby="user-profile-button"
           className="absolute bottom-full mb-2.5 left-0 right-0 bg-white rounded-2xl border border-warm-border shadow-warm-lg p-2 z-50 animate-fade-in text-xs font-semibold text-charcoal-800"
         >
@@ -80,7 +80,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
           </div>
 
           <button
-            role="menuitem"
+            type="button"
             onClick={() => handleMenuItemClick("My Profile", "Phase 2 Supabase Auth will load user preferences and connected workspace.")}
             className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-beige-100 hover:text-charcoal-900 text-charcoal-700 transition-all duration-180 text-left group"
           >
@@ -92,7 +92,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
           </button>
 
           <button
-            role="menuitem"
+            type="button"
             onClick={() => handleMenuItemClick("Settings", "Settings will allow configuring custom Tavily search depth and Gemini prompts.")}
             className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-beige-100 hover:text-charcoal-900 text-charcoal-700 transition-all duration-180 text-left group"
           >
@@ -106,7 +106,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
           <div className="my-1 border-t border-warm-border/60" />
 
           <button
-            role="menuitem"
+            type="button"
             onClick={() => handleMenuItemClick("Help & Support", "View Phase 1 documentation and Phase 2 backend roadmap in README.md.")}
             className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-beige-100 hover:text-charcoal-900 text-charcoal-700 transition-all duration-180 text-left group"
           >
@@ -121,7 +121,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
         ref={triggerRef}
         id="user-profile-button"
         type="button"
-        aria-haspopup="true"
+        aria-haspopup="dialog"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         className="profile-trigger w-full p-2.5 rounded-xl border border-warm-border/80 bg-[#F4EFE5] hover:bg-white hover:border-gold-muted/70 hover:shadow-warm transition-all duration-200 ease-out flex items-center justify-between group shadow-warm-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-muted cursor-pointer"

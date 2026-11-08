@@ -5,6 +5,7 @@ import {
   Menu,
   Sparkles
 } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import { BrandIcon } from './Logo';
 
 /**
@@ -24,7 +25,7 @@ export default function Header({
     <header className="dashboard-header no-print sticky top-0 z-30 bg-[#F5F0E6]/95 backdrop-blur-md border-b border-warm-border px-4 sm:px-6 lg:px-8 py-3.5 transition-all">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Left: Mobile hamburger & Breadcrumbs */}
-        <div className="flex items-center space-x-3 sm:space-x-4">
+        <div className="header-identity flex items-center space-x-3 sm:space-x-4">
           <button
             onClick={onToggleSidebar}
             className="lg:hidden p-2 text-charcoal-700 hover:text-charcoal-900 rounded-xl hover:bg-beige-200/80 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-muted"
@@ -43,7 +44,7 @@ export default function Header({
               <span className="font-serif font-bold text-lg text-charcoal-900 tracking-tight sm:text-xl">
                 BriefMeet <span className="text-gold-muted font-serif text-lg sm:text-2xl font-semibold">AI</span>
               </span>
-              <span className="hidden sm:inline-block text-charcoal-300">/</span>
+              <span className="hidden xl:inline-block header-context text-charcoal-300">/</span>
               <span className="hidden sm:inline-block header-context text-sm font-medium text-charcoal-900">
                 {currentBriefing ? `Briefing: ${currentBriefing.targetName}` : 'Pre-Meeting Research Dashboard'}
               </span>
@@ -55,7 +56,8 @@ export default function Header({
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="header-actions flex items-center space-x-2 sm:space-x-3">
+          <ThemeToggle />
           {/* Error Simulation Toggle for Testing */}
           <button
             type="button"

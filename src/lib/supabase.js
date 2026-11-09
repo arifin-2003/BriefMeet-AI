@@ -15,11 +15,11 @@ function initializeSupabase() {
     }
 
     return createClient(url, publishableKey, {
-      // Phase 2B only establishes the client; Auth/session handling comes later.
       auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        flowType: 'implicit',
       },
     });
   } catch {
@@ -28,11 +28,11 @@ function initializeSupabase() {
   }
 }
 
-// Future consumers must check availability before calling Supabase APIs.
+// Consumers must check availability before calling Supabase APIs.
 // Valid syntax does not verify credentials or connectivity to the project.
 export const supabase = initializeSupabase();
 export const isSupabaseConfigured = supabase !== null;
 
 if (import.meta.env.DEV && !isSupabaseConfigured) {
-  console.warn('Supabase is unavailable: check VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY. Demo mode is unaffected.');
+  console.warn('Supabase is unavailable: check VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY.');
 }

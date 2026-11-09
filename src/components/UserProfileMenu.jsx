@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { User, Settings, HelpCircle, ChevronUp, Sparkles, Check, Shield } from 'lucide-react';
-import { MOCK_USER } from '../data/mockUser';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 /**
  * UserProfileMenu Component
@@ -8,7 +9,27 @@ import { MOCK_USER } from '../data/mockUser';
  * Elegant SaaS user profile dropdown with click-outside dismissal,
  * escape key handling, status badge, and smooth popup micro-interactions.
  */
-export default function UserProfileMenu({ user = MOCK_USER }) {
+export default function UserProfileMenu() {
+  const { user: authUser } = useAuth();
+  // A profiles row is optional. Auth identity remains usable without one.
+  const user = {
+    name: authUser?.email || 'Signed-in user',
+    email: authUser?.email || '',
+    initials: (authUser?.email || 'U').slice(0, 2).toUpperCase(),
+    workspace: 'BriefMeet AI',
+  };
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState('');
+  async function handleSignOut() {
+    setSigningOut(true);
+    setSignOutError('');
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      if (error) setSignOutError('Could not sign out. Check your connection and try again.');
+    } catch {
+      setSignOutError('Could not sign out. Check your connection and try again.');
+    } finally { setSigningOut(false); }
+  }
   const [isOpen, setIsOpen] = useState(false);
   const [activeNotice, setActiveNotice] = useState(null);
   const menuRef = useRef(null);
@@ -71,7 +92,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
           {/* User info card */}
           <div className="px-3 py-2.5 bg-[#FAF7F2] rounded-xl border border-warm-border/60 mb-1.5">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-charcoal-900 text-xs">{user.name}</span>
+              <span className="font-bold text-charcoal-900 text-xs truncate min-w-0 mr-2" title={user.email}>{user.name}</span>
               <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
                 Active
               </span>
@@ -81,7 +102,7 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
 
           <button
             type="button"
-            onClick={() => handleMenuItemClick("My Profile", "Phase 2 Supabase Auth will load user preferences and connected workspace.")}
+            onClick={() => handleMenuItemClick("My Profile", "You are signed in with your email. Profile preferences are not available yet.")}
             className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-beige-100 hover:text-charcoal-900 text-charcoal-700 transition-all duration-180 text-left group"
           >
             <User className="w-4 h-4 text-softbrown group-hover:text-gold-muted transition-colors" />
@@ -112,6 +133,12 @@ export default function UserProfileMenu({ user = MOCK_USER }) {
           >
             <HelpCircle className="w-4 h-4 text-softbrown group-hover:text-gold-muted transition-colors" />
             <span>Help & Documentation</span>
+          </button>
+          <div className="my-1 border-t border-warm-border/60" />
+          {signOutError && <p role="alert" className="px-3 py-2 text-xs">{signOutError}</p>}
+          <button type="button" onClick={handleSignOut} disabled={signingOut}
+            className="w-full text-left px-3 py-2 rounded-xl hover:bg-beige-100 disabled:opacity-50">
+            {signingOut ? 'Signing out…' : 'Sign out'}
           </button>
         </div>
       )}

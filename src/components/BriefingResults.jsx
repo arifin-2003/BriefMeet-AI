@@ -146,7 +146,7 @@ export default function BriefingResults({
           </span>
         </div>
         <span className="hidden md:inline-block text-[10px] font-mono uppercase bg-gold-light px-2 py-0.5 rounded font-bold text-softbrown-dark border border-gold-muted/30">
-          Mock Verification Mode
+          Unverified Demo
         </span>
       </div>
 

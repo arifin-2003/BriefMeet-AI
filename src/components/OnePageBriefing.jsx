@@ -146,7 +146,7 @@ export default function OnePageBriefing({
               <Newspaper className="w-3.5 h-3.5 text-softbrown" />
               Top News (Last 30 Days)
             </span>
-            <span className="text-[10px] text-charcoal-400 font-normal">Recent Verified</span>
+            <span className="text-[10px] text-charcoal-400 font-normal">Mock / Unverified</span>
           </h2>
           <div className="space-y-3">
             {topNews.length === 0 ? (
@@ -296,7 +296,7 @@ export default function OnePageBriefing({
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-xs font-bold uppercase tracking-wider text-charcoal-500 flex items-center gap-1.5">
             <BookOpen className="w-3.5 h-3.5 text-softbrown" />
-            <span>Numbered Source References & Verification Citations</span>
+            <span>Numbered Demo Source References</span>
           </h2>
           <span className="text-[10px] text-charcoal-400 font-medium">
             Demo Sources (Phase 1)

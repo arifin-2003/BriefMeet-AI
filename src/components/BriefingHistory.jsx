@@ -8,7 +8,6 @@ import {
   ArrowRight, 
   PlusCircle, 
   BookOpen, 
-  Trash2,
   Sparkles
 } from 'lucide-react';
 
@@ -22,7 +21,8 @@ export default function BriefingHistory({
   history = [], 
   onSelectBriefing, 
   onNewBriefing,
-  onClearHistory 
+  onDeleteBriefing,
+  busy = false,
 }) {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -39,21 +39,11 @@ export default function BriefingHistory({
             Briefing History
           </h2>
           <p className="text-xs text-charcoal-500 mt-1">
-            Revisit or export previous executive research briefings generated during this session.
+            Reopen saved reports from your account. Demo snapshots contain unverified mock research.
           </p>
         </div>
 
         <div className="flex items-center space-x-2.5">
-          {history.length > 0 && (
-            <button
-              onClick={onClearHistory}
-              className="text-xs font-semibold text-charcoal-600 hover:text-red-700 px-3.5 py-2 rounded-xl border border-warm-border hover:border-red-300 hover:bg-red-50/50 transition-all duration-200 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear History</span>
-            </button>
-          )}
-
           <button
             onClick={onNewBriefing}
             className="flex items-center space-x-1.5 bg-charcoal-900 hover:bg-charcoal-800 text-beige-50 px-4 py-2 rounded-xl text-xs font-semibold shadow-warm hover:shadow-warm-md hover:-translate-y-0.5 active:scale-95 transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-muted cursor-pointer"
@@ -74,7 +64,7 @@ export default function BriefingHistory({
             No briefings in history yet
           </h3>
           <p className="text-xs text-charcoal-500 mb-6 max-w-sm mx-auto">
-            Generate your first pre-meeting briefing to have it cached here for rapid review and export.
+            Create a demo briefing, then choose Save demo briefing to store it in your account.
           </p>
           <button
             onClick={onNewBriefing}
@@ -92,7 +82,7 @@ export default function BriefingHistory({
               onClick={() => onSelectBriefing(item)}
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
                   e.preventDefault();
                   onSelectBriefing(item);
                 }
@@ -119,6 +109,7 @@ export default function BriefingHistory({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-charcoal-500 mt-1">
+                    <span>{item.researchMode === 'mock' ? 'Saved demo (unverified)' : 'Saved report (verification unspecified)'} · {item.status}</span>
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-softbrown" />
                       Meeting: {item.meetingDate}
@@ -138,6 +129,9 @@ export default function BriefingHistory({
               </div>
 
               <div className="flex items-center justify-between sm:justify-end space-x-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-warm-border/50">
+                <button type="button" disabled={busy} aria-label={`Delete briefing for ${item.targetName}`}
+                  onClick={e => { e.stopPropagation(); onDeleteBriefing(item); }}
+                  className="rounded-lg border border-warm-border px-3 py-2 text-xs text-charcoal-700 hover:bg-beige-100 disabled:opacity-50">Delete</button>
                 <span className="text-[11px] text-charcoal-400 font-medium">
                   {item.generatedAt || 'Recent'}
                 </span>

@@ -7,6 +7,7 @@ import ErrorMessage from './components/ErrorMessage';
 import EmptyState from './components/EmptyState';
 import BriefingResults from './components/BriefingResults';
 import BriefingHistory from './components/BriefingHistory';
+import LiveResearchTest from './components/LiveResearchTest';
 import { generateBriefing } from './services/briefingService';
 import { useAuth } from './contexts/AuthContext';
 import { supabase } from './lib/supabase';
@@ -196,6 +197,7 @@ function Dashboard({ user }) {
 
         {/* Dynamic Page Views */}
         <main className="dashboard-main flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {import.meta.env.DEV && user && <LiveResearchTest />}
           <div className="mb-4 rounded-xl border border-warm-border bg-gold-pale px-4 py-3 text-sm text-charcoal-900">
             Demo research only: no live search or AI verification. Save explicitly to store a demo snapshot in your account.
           </div>

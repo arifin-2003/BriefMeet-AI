@@ -22,10 +22,16 @@ export async function requestBriefing(client, params, onProgress = () => {}) {
   if (error) {
     let payload;
     try { payload = await error.context?.clone().json(); } catch { /* Never display raw provider responses. */ }
-    const message = [401, 403].includes(error.context?.status)
+    const sources = safeSources(payload?.sources);
+    const isAuthFailure = [401, 403].includes(error.context?.status);
+    if (!isAuthFailure && typeof payload?.code === 'string' && payload.code.startsWith('GEMINI_') && sources.length) {
+      return { ...params, status: 'research_only', briefing: null, hasData: true,
+        researchMode: 'live', isDemo: false, sources, aiNotice: failureMessage(payload.code) };
+    }
+    const message = isAuthFailure
       ? 'Authentication rejected. Please sign out and sign in again.'
       : failureMessage(payload?.code);
-    throw Object.assign(new Error(message), { sources: safeSources(payload?.sources), code: payload?.code });
+    throw Object.assign(new Error(message), { sources, code: payload?.code });
   }
   const sources = safeSources(data?.sources);
   if (data?.status === 'empty') return { ...params, ...data, sources, hasData: false, researchMode: 'live', isDemo: false };

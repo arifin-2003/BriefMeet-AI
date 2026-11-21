@@ -36,14 +36,29 @@ test('frontend requires a session before invoking providers', async () => {
   await assert.rejects(requestBriefing(client({}), { ...params, targetName: '' }), /required/);
 });
 
-test('frontend rejects failed Gemini result and retains research from non-2xx context', async () => {
-  const error = { context: Response.json({ status: 'failed', code: 'GEMINI_RATE_LIMIT', sources: [source], error: 'private detail' }, { status: 429 }) };
-  await assert.rejects(requestBriefing(client({ error }), params), failure => {
-    assert.equal(failure.sources[0].url, source.url);
-    assert.equal(failure.code, 'GEMINI_RATE_LIMIT');
-    assert.doesNotMatch(failure.message, /private detail/);
-    return true;
-  });
+test('Gemini 404 and 503 return research-only results with safe notices', async () => {
+  for (const status of [404, 503]) {
+    const error = { context: Response.json({ code: 'GEMINI_UNAVAILABLE', sources: [source], error: 'private detail' }, { status }) };
+    const result = await requestBriefing(client({ error }), params);
+    assert.equal(result.status, 'research_only');
+    assert.equal(result.briefing, null);
+    assert.equal(result.hasData, true);
+    assert.equal(result.researchMode, 'live');
+    assert.equal(result.sources[0].url, source.url);
+    assert.match(result.aiNotice, /unavailable/);
+    assert.doesNotMatch(result.aiNotice, /private detail/);
+  }
+});
+
+test('Gemini errors without valid sources and research or authentication failures still throw', async () => {
+  for (const sources of [[], [{ ...source, url: 'javascript:alert(1)' }]]) {
+    const error = { context: Response.json({ code: 'GEMINI_UNAVAILABLE', sources }, { status: 503 }) };
+    await assert.rejects(requestBriefing(client({ error }), params), /unavailable/);
+  }
+  for (const [status, code, message] of [[502, 'RESEARCH_UNAVAILABLE', /Research provider/], [401, 'GEMINI_UNAVAILABLE', /Authentication rejected/], [403, 'GEMINI_UNAVAILABLE', /Authentication rejected/]]) {
+    const error = { context: Response.json({ code, sources: [source] }, { status }) };
+    await assert.rejects(requestBriefing(client({ error }), params), message);
+  }
 });
 
 test('frontend handles empty, malformed, auth and network errors', async () => {
@@ -86,4 +101,20 @@ test('React failure sources remain clickable and source text is escaped', async 
   assert.match(html, /href="https:\/\/example.com\/news"/);
   assert.match(html, /&lt;script&gt;/);
   assert.doesNotMatch(html, /<script>/);
+});
+
+test('research-only view shows notice and linked sources without briefing or save controls', async () => {
+  const { ResearchSources } = await loadComponent('src/components/GeneratedBriefing.jsx');
+  const sourceCode = await readFile('src/components/ResearchOnly.jsx', 'utf8');
+  const compiled = await transformWithEsbuild(sourceCode, 'ResearchOnly.jsx', { loader: 'jsx', jsx: 'transform' });
+  globalThis.__briefmeetTestResearchSources = ResearchSources;
+  const code = compiled.code.replace(/import React from ["']react["'];?/, 'const React = globalThis.__briefmeetTestReact;')
+    .replace(/import \{ ResearchSources \} from ["']\.\/GeneratedBriefing["'];?/, 'const ResearchSources = globalThis.__briefmeetTestResearchSources;');
+  const { default: ResearchOnly } = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
+  const error = { context: Response.json({ code: 'GEMINI_UNAVAILABLE', sources: [source] }, { status: 503 }) };
+  const result = await requestBriefing(client({ error }), params);
+  const html = renderToStaticMarkup(React.createElement(ResearchOnly, { briefing: result }));
+  assert.match(html, /Research sources found — AI briefing unavailable/);
+  assert.match(html, /href="https:\/\/example.com\/news"/);
+  assert.doesNotMatch(html, /Save briefing|Executive Summary|AI-generated/);
 });

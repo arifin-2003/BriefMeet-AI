@@ -7,6 +7,7 @@ import ErrorMessage from './components/ErrorMessage';
 import EmptyState from './components/EmptyState';
 import BriefingResults from './components/BriefingResults';
 import GeneratedBriefing, { ResearchSources } from './components/GeneratedBriefing';
+import ResearchOnly from './components/ResearchOnly';
 import BriefingHistory from './components/BriefingHistory';
 import LiveResearchTest from './components/LiveResearchTest';
 import { generateBriefing } from './services/briefingService';
@@ -207,7 +208,7 @@ function Dashboard({ user }) {
             <button type="button" disabled={databaseBusy || historyLoading} className="ml-3 underline disabled:opacity-50" onClick={() => { setDatabaseError(''); setHistoryVersion(v => v + 1); }}>Refresh history</button>
           </div>}
           {databaseBusy && <p role="status" className="mb-4 text-sm text-charcoal-700">Saving, opening, or deleting your briefing...</p>}
-          {currentView === 'results' && briefing?.hasData && <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-charcoal-900 no-print">
+          {currentView === 'results' && briefing?.hasData && briefing.status !== 'research_only' && <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-charcoal-900 no-print">
             <button type="button" onClick={handleSave} disabled={databaseBusy || saveState === 'saved'} className="rounded-xl bg-charcoal-900 px-4 py-2 text-beige-50 disabled:opacity-60">
               {saveState === 'saved' ? 'Saved to your account' : saveState === 'retry' ? 'Retry saving briefing' : 'Save briefing'}
             </button>
@@ -249,6 +250,8 @@ function Dashboard({ user }) {
                 onReset={handleNewBriefing}
                 onSelectPreset={handleSelectPreset}
               />
+            ) : briefing.status === 'research_only' ? (
+              <ResearchOnly briefing={briefing} onBackToGenerator={handleNewBriefing} />
             ) : briefing.researchMode === 'live' ? (
               <GeneratedBriefing briefing={briefing} onBackToGenerator={handleNewBriefing} />
             ) : (

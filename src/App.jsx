@@ -6,6 +6,7 @@ import LoadingState from './components/LoadingState';
 import ErrorMessage from './components/ErrorMessage';
 import EmptyState from './components/EmptyState';
 import BriefingResults from './components/BriefingResults';
+import GeneratedBriefing, { ResearchSources } from './components/GeneratedBriefing';
 import BriefingHistory from './components/BriefingHistory';
 import LiveResearchTest from './components/LiveResearchTest';
 import { generateBriefing } from './services/briefingService';
@@ -66,7 +67,7 @@ function Dashboard({ user }) {
     setDatabaseError('');
     try {
       const draft = { ...briefing, sources: briefing.sourceSnapshot || briefing.sources };
-      const saved = await database.saveDemo(draft);
+      const saved = await database.save(draft);
       setBriefing(saved);
       setSaveState('saved');
       setHistoryVersion(v => v + 1);
@@ -105,6 +106,7 @@ function Dashboard({ user }) {
       const result = await generateBriefing(
         {
           targetName: formData.targetName,
+          targetType: formData.entityType,
           meetingDate: formData.meetingDate,
           meetingTime: formData.meetingTime,
           meetingContext: formData.meetingContext || '',
@@ -116,13 +118,12 @@ function Dashboard({ user }) {
       );
 
       setBriefing({ ...result, targetName: formData.targetName.trim(), targetType: formData.entityType,
-        isDemo: true, researchMode: 'mock', verified: false, databaseId: crypto.randomUUID(),
+        databaseId: crypto.randomUUID(),
         sources: (result.sources || []).map(source => ({ ...source, databaseSourceId: crypto.randomUUID() })),
       });
       setCurrentView('results');
 
     } catch (err) {
-      console.error("Briefing generation error:", err);
       setError(err);
     } finally {
       setIsLoading(false);
@@ -153,7 +154,7 @@ function Dashboard({ user }) {
       setBriefing(saved);
       setSaveState(saved.sourcesIncomplete ? 'retry' : 'saved');
       setCurrentView('results');
-      if (saved.sourcesIncomplete) setDatabaseError('Some source rows are missing. Retry saving to restore the saved demo citations.');
+      if (saved.sourcesIncomplete) setDatabaseError('Some source rows are missing. Retry saving to restore the saved citations.');
     } catch (err) { setDatabaseError(databaseMessage(err)); }
     finally { setDatabaseBusy(false); }
   };
@@ -199,7 +200,7 @@ function Dashboard({ user }) {
         <main className="dashboard-main flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {import.meta.env.DEV && user && <LiveResearchTest />}
           <div className="mb-4 rounded-xl border border-warm-border bg-gold-pale px-4 py-3 text-sm text-charcoal-900">
-            Demo research only: no live search or AI verification. Save explicitly to store a demo snapshot in your account.
+            Live research uses Tavily and Gemini. Review the linked evidence before your meeting. Save explicitly to keep a snapshot in your account.
           </div>
           {databaseError && <div role="alert" className="mb-4 rounded-xl border border-warm-border bg-white p-4 text-sm text-charcoal-900">
             {databaseError}
@@ -208,9 +209,9 @@ function Dashboard({ user }) {
           {databaseBusy && <p role="status" className="mb-4 text-sm text-charcoal-700">Saving, opening, or deleting your briefing...</p>}
           {currentView === 'results' && briefing?.hasData && <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-charcoal-900 no-print">
             <button type="button" onClick={handleSave} disabled={databaseBusy || saveState === 'saved'} className="rounded-xl bg-charcoal-900 px-4 py-2 text-beige-50 disabled:opacity-60">
-              {saveState === 'saved' ? 'Saved to your account' : saveState === 'retry' ? 'Retry saving demo briefing' : 'Save demo briefing'}
+              {saveState === 'saved' ? 'Saved to your account' : saveState === 'retry' ? 'Retry saving briefing' : 'Save briefing'}
             </button>
-            <span>Mock report and citations; not verified AI research.</span>
+            <span>{briefing.isDemo ? 'Saved demo research (unverified).' : 'AI research with source citations; review for accuracy.'}</span>
           </div>}
           {/* Loading View */}
           {isLoading ? (
@@ -220,12 +221,15 @@ function Dashboard({ user }) {
             />
           ) : error ? (
             /* Error View */
+            <>
             <ErrorMessage
               error={error}
               onRetry={handleRetry}
               onReset={handleNewBriefing}
               onSelectPreset={handleSelectPreset}
             />
+            {error.sources?.length > 0 && <ResearchSources sources={error.sources} />}
+            </>
           ) : currentView === 'history' && historyLoading ? (
             <p role="status" className="text-charcoal-700">Loading saved briefings...</p>
           ) : currentView === 'history' ? (
@@ -245,6 +249,8 @@ function Dashboard({ user }) {
                 onReset={handleNewBriefing}
                 onSelectPreset={handleSelectPreset}
               />
+            ) : briefing.researchMode === 'live' ? (
+              <GeneratedBriefing briefing={briefing} onBackToGenerator={handleNewBriefing} />
             ) : (
               <BriefingResults
                 briefing={briefing}
@@ -269,7 +275,7 @@ function Dashboard({ user }) {
               <strong className="text-charcoal-900">BriefMeet AI</strong> — Professional Pre-Meeting Research Assistant
             </span>
             <div className="flex items-center space-x-3 text-[11px] text-charcoal-500 font-medium">
-              <span>Phase 2E: Demo research</span>
+              <span>Tavily + Gemini research</span>
               <span>•</span>
               <span>React + Vite</span>
               <span>•</span>

@@ -24,7 +24,7 @@ export default function EmptyState({ targetName, onReset, onSelectPreset }) {
         </h3>
 
         <p className="text-sm text-charcoal-600 max-w-md mx-auto mb-6 leading-relaxed">
-          Our simulated crawler found zero 30-day press releases, verified executive hires, or notable public filings matching this query.
+          No usable research sources were returned for this target. Try a more specific company or professional name.
         </p>
 
         {/* Suggestion Box */}
@@ -36,7 +36,7 @@ export default function EmptyState({ targetName, onReset, onSelectPreset }) {
           <ul className="list-disc list-inside space-y-1 text-charcoal-500 pl-1">
             <li>Verify the spelling of the company or person's full legal name.</li>
             <li>Try adding parent company keywords or location.</li>
-            <li>In Phase 2, Tavily Deep Search will run automatic semantic fallback queries.</li>
+            <li>Include a company name or professional role to disambiguate the target.</li>
           </ul>
         </div>
 
@@ -56,7 +56,7 @@ export default function EmptyState({ targetName, onReset, onSelectPreset }) {
           <div className="mt-8 pt-5 border-t border-warm-border/60">
             <p className="text-xs text-charcoal-500 mb-2 font-medium flex items-center justify-center gap-1">
               <Zap className="w-3 h-3 text-gold-muted" />
-              Test with one of our featured demo datasets:
+              Try another research target:
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {DEMO_PRESETS.map((preset, idx) => (

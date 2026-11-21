@@ -50,7 +50,7 @@ export default function Header({
               </span>
             </div>
             <p className="header-description hidden md:block text-[11px] text-charcoal-500 font-medium">
-              30-day news intelligence, leadership appointments, product launches & high-impact meeting questions
+              Sourced developments, leadership insights & high-impact meeting questions
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function Header({
         <div className="header-actions flex items-center space-x-2 sm:space-x-3">
           <ThemeToggle />
           {/* Error Simulation Toggle for Testing */}
-          <button
+          {import.meta.env.DEV && <button
             type="button"
             aria-pressed={simulateError}
             onClick={() => setSimulateError(!simulateError)}
@@ -75,7 +75,7 @@ export default function Header({
             <span className={`font-bold ${simulateError ? 'text-amber-800' : 'text-charcoal-500'}`}>
               {simulateError ? 'ON' : 'OFF'}
             </span>
-          </button>
+          </button>}
 
           {/* New Briefing Button */}
           <button

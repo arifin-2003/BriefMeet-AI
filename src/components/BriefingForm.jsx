@@ -133,13 +133,13 @@ export default function BriefingForm({
           <div>
             <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-gold-light border border-gold-muted/40 text-softbrown-dark text-xs font-bold uppercase tracking-wider mb-2">
               <Sparkles className="w-3.5 h-3.5 text-gold-muted" />
-              <span>Phase 1 Prototype</span>
+              <span>Live Research</span>
             </div>
             <h1 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal-900 tracking-tight leading-tight">
               Prepare for your next meeting
             </h1>
             <p className="text-xs sm:text-sm text-charcoal-600 mt-1 max-w-xl leading-relaxed">
-              Enter any company or executive name to generate an executive one-page briefing with 30-day developments, leadership hires, and intelligent questions.
+              Enter any company or executive name to generate an executive one-page briefing with sourced developments, leadership insights, opportunities, risks, and meeting questions.
             </p>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function BriefingForm({
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-charcoal-500 flex items-center gap-1.5 mr-1 select-none">
               <Zap className="w-3.5 h-3.5 text-gold-muted" />
-              Try Demo Presets:
+              Try Research Targets:
             </span>
             {DEMO_PRESETS.map((preset, idx) => (
               <button
@@ -332,7 +332,7 @@ export default function BriefingForm({
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-warm-border/60">
           <div className="text-xs text-charcoal-500 flex items-center gap-1.5">
             <Info className="w-3.5 h-3.5 text-gold-muted shrink-0" />
-            <span>Simulates 30-day Tavily search and Gemini executive briefing synthesis</span>
+            <span>Tavily research and Gemini executive briefing synthesis</span>
           </div>
 
           <button

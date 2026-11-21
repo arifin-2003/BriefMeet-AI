@@ -27,7 +27,7 @@ export default function ErrorMessage({
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-red-800 bg-red-100/80 px-2 py-0.5 rounded border border-red-200">
-                Simulated Gateway Error
+                Briefing Request Failed
               </span>
             </div>
 
@@ -39,14 +39,7 @@ export default function ErrorMessage({
               {errorMessage}
             </p>
 
-            <div className="text-xs text-charcoal-600 space-y-1 mb-5">
-              <p className="font-bold text-charcoal-800">Possible reasons in Phase 1 Prototype:</p>
-              <ul className="list-disc list-inside space-y-1 text-charcoal-500 pl-1">
-                <li>The "Simulate Error" toggle in the top header is active.</li>
-                <li>The input query contained a simulated error trigger keyword (e.g. "error" or "fail").</li>
-                <li>Simulated network latency timeout.</li>
-              </ul>
-            </div>
+            <p className="text-xs text-charcoal-600 mb-5">Check your connection and retry. If the issue persists, the research or AI provider may be temporarily unavailable.</p>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-warm-border">
@@ -78,7 +71,7 @@ export default function ErrorMessage({
               <div className="mt-5 pt-4 border-t border-warm-border/60">
                 <p className="text-xs text-charcoal-500 mb-2 font-medium flex items-center gap-1">
                   <Zap className="w-3 h-3 text-gold-muted" />
-                  Or test with a known working demo dataset:
+                  Try another research target:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {DEMO_PRESETS.map((preset, idx) => (

@@ -39,7 +39,7 @@ export default function BriefingHistory({
             Briefing History
           </h2>
           <p className="text-xs text-charcoal-500 mt-1">
-            Reopen saved reports from your account. Demo snapshots contain unverified mock research.
+            Reopen saved reports from your account. Older demo snapshots remain labeled.
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export default function BriefingHistory({
             No briefings in history yet
           </h3>
           <p className="text-xs text-charcoal-500 mb-6 max-w-sm mx-auto">
-            Create a demo briefing, then choose Save demo briefing to store it in your account.
+            Create a briefing, then choose Save briefing to store it in your account.
           </p>
           <button
             onClick={onNewBriefing}
@@ -109,7 +109,7 @@ export default function BriefingHistory({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-charcoal-500 mt-1">
-                    <span>{item.researchMode === 'mock' ? 'Saved demo (unverified)' : 'Saved report (verification unspecified)'} · {item.status}</span>
+                    <span>{item.researchMode === 'mock' ? 'Saved demo (unverified)' : item.researchMode === 'live' ? 'Saved AI research (review sources)' : 'Saved report'} · {item.status}</span>
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-softbrown" />
                       Meeting: {item.meetingDate}

@@ -149,3 +149,18 @@ test('invalid dates become null and empty sources are valid', async () => {
   await f.database.saveDemo({ ...draft('empty'), sources: [] });
   assert.deepEqual((await f.database.get('empty')).sources, []);
 });
+
+test('live reports save and reopen with all generated sections and stable citation IDs', async () => {
+  const f = fixture();
+  const value = { ...draft('live-1'), isDemo: false, researchMode: 'live', status: 'completed', provider: 'tavily+gemini',
+    briefing: { executiveSummary: [{ text: 'Sourced fact', kind: 'fact', sourceIds: ['cite-1'] }],
+      keyDevelopments: [], leadershipInsights: [], opportunities: [], risks: [], meetingQuestions: [] } };
+  const saved = await f.database.save(value);
+  assert.equal(saved.isDemo, false);
+  assert.equal(saved.researchMode, 'live');
+  assert.equal(saved.verified, false);
+  assert.deepEqual(saved.briefing, value.briefing);
+  assert.equal(saved.sources[0].id, saved.briefing.executiveSummary[0].sourceIds[0]);
+  assert.equal((await f.database.list())[0].researchMode, 'live');
+  await assert.rejects(f.database.save({ ...value, databaseId: 'failed-live', status: 'failed' }), /incomplete AI briefing/);
+});

@@ -2,9 +2,12 @@
   "version": "5",
   "specifiers": {
     "jsr:@supabase/functions-js@*": "2.119.0",
+    "jsr:@supabase/functions-js@2.119.0": "2.119.0",
     "jsr:@supabase/server@1": "1.9.2",
+    "jsr:@supabase/server@1.9.2": "1.9.2",
     "npm:@supabase/middleware@1": "1.0.0",
     "npm:@supabase/supabase-js@^2.114.0": "2.119.0",
+    "npm:jose@6.2.16": "6.2.16",
     "npm:jose@^6.2.0": "6.2.16",
     "npm:openai@^4.52.5": "4.104.0"
   },
@@ -20,7 +23,7 @@
       "dependencies": [
         "npm:@supabase/middleware",
         "npm:@supabase/supabase-js",
-        "npm:jose"
+        "npm:jose@^6.2.0"
       ]
     }
   },
@@ -290,5 +293,12 @@
         "webidl-conversions"
       ]
     }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@supabase/functions-js@2.119.0",
+      "jsr:@supabase/server@1.9.2",
+      "npm:jose@6.2.16"
+    ]
   }
 }

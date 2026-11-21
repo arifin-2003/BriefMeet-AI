@@ -74,7 +74,8 @@ export function createBriefingDatabase(client) {
       if (!row) throw unavailable();
       return restoreReport(row);
     },
-    async saveDemo(draft) {
+    async saveDemo(draft) { return this.save({ ...draft, isDemo: true, researchMode: 'mock', verified: false }); },
+    async save(draft) {
       const userId = await identity();
       if (!draft.databaseId || !['company', 'person'].includes(draft.targetType) || !draft.targetName?.trim() || !draft.meetingDate) {
         throw new Error('Invalid briefing fields');
@@ -82,7 +83,8 @@ export function createBriefingDatabase(client) {
       // Stable IDs make retries safe even if a response is lost after a successful write.
       let row = await rawRecord(draft.databaseId, userId);
       if (!row) {
-        const report = { ...draft, isDemo: true, researchMode: 'mock', verified: false };
+        if (draft.researchMode === 'live' && (draft.status !== 'completed' || !draft.briefing)) throw new Error('Cannot save an incomplete AI briefing');
+        const report = { ...draft, isDemo: draft.researchMode !== 'live', researchMode: draft.researchMode === 'live' ? 'live' : 'mock', verified: false };
         delete report.sourceSnapshot;
         delete report.sourcesIncomplete;
         const { error } = await client.from('briefings').insert({ id: draft.databaseId, user_id: userId,
@@ -98,7 +100,7 @@ export function createBriefingDatabase(client) {
       if (missing.length) {
         const payload = missing.map(s => {
           const timestamp = Date.parse(s.publishDate);
-          return { id: s.databaseSourceId, briefing_id: row.id, title: s.title || 'Untitled demo source',
+          return { id: s.databaseSourceId, briefing_id: row.id, title: s.title || 'Untitled source',
             url: s.url || '', publisher: s.publisher || null,
             published_at: Number.isNaN(timestamp) ? null : new Date(timestamp).toISOString() };
         });
